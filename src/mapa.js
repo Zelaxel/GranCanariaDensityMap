@@ -16,14 +16,10 @@ let mapy;
 let scale = 5;
 
 // Coord variables.
-let minlon = -15.8456;
-let minlat = 27.7347; 
-let maxlon = -15.3585; 
+let minlon = -15.8366;
+let minlat = 27.7338; 
+let maxlon = -15.3570; 
 let maxlat = 28.1819; 
-
-// Objects variables.
-let data = [];
-let objects = [];
 
 // Start scene.
 init();
@@ -62,7 +58,10 @@ function init() {
       // Get data.
       loadCsv(locals);
     }
-  )
+  );
+
+  // Resize listener.
+  window.addEventListener('resize', onWindowResize, false);
 }
 
 /* Animation loop */
@@ -96,6 +95,13 @@ function loadCsv(url) {
     })
     .then((content) => {
       parseCSV(content);
+    })
+    .then(() => {
+      // Add points to the scene.
+      for (let i = 0; i < data.length; i++) {
+        sumDistances = data.reduce((acc, point) => acc + getDistance(data[i], point), 0);
+        setSphere(data[i].x, data[i].y, 0, 0.02);
+      }
     })
     .catch((error) => {
       console.error("Error loading CSV file:", error);
@@ -137,10 +143,14 @@ function parseCSV(content) {
       mapx / 2
     );
 
-    // Add the point to the data array.
-    setSphere(newX, newY, 0, 0.010);
-    //console.log("Point added: ", line);
+    // Add the point to the map array.
+    setSphere(newX, newY, 0, 0.02);
   }
+}
+
+/* Calculate the distance between two points. */
+function getDistance(p1, p2) {
+  return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
 }
 
 function setSphere(px, py, pz, radius) {
@@ -157,3 +167,9 @@ function Map2Range(val, vmin, vmax, dmin, dmax) {
   return dmin + t * (dmax - dmin);
 }
 
+/* Handle window resize */
+function onWindowResize() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+}
