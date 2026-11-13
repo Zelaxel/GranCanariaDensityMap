@@ -4,6 +4,12 @@ A web application built with **Three.js** that renders a textured map of the isl
 
 ---
 
+## Video example
+
+- [Video](https://drive.google.com/file/d/1p0Gld4Mxxltb-Io_BHFNzEDdAAGu2103/view?usp=sharing)
+
+---
+
 ## Technologies & Libraries Used
 - **[JavaScript (ES6+)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)**
 - **[Three.js](https://threejs.org/)**
